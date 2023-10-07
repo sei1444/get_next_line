@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: seono <seono@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 22:05:55 by marvin            #+#    #+#             */
-/*   Updated: 2023/09/20 09:30:21 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/07 16:59:00 by seono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ char *get_next_line(int fd)
     bytes_read = read(fd, buf, BUFFER_SIZE);
     if (bytes_read == -1)
         return NULL;
-    else
+    else if (bytes_read == 0)
+		return ;
+	else
     {
-        
+		
     }
     
 }
