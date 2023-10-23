@@ -15,7 +15,10 @@
 
 #include <unistd.h>
  
-
 char *get_next_line(int fd);
+char *free_memory(char *s1, char *s2);
+size_t ft_strlen(const char *s);
+char	*ft_strjoin(char *save, char const *str, int savelen, int strlen);
+int search_newline(char *ptr);
 
 #endif
