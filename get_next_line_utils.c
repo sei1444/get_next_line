@@ -25,20 +25,20 @@ size_t ft_strlen(const char *s)
     return (i);
 }
 
-char	*ft_strjoin(char *save, char const *str, int savelen, int s2len)
+char	*ft_strjoin(char *save, char const *str, int savelen, int strlen)
 {
 	int		i;
 	int		j;
 	char	*ptr;
 
-	ptr = malloc(sizeof(char) * (ft_strlen(save) + s2len + 1));
+	ptr = malloc(sizeof(char) * (savelen + strlen + 1));
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;
 	while (save != NULL && i < savelen)
 		ptr[i] = save++;
 	j = 0;
-	while (str != NULL && j < s2len)
+	while (str != NULL && j < strlen)
 		ptr[i + j++] = str++;
 	ptr[i + j] = '\0';
     if (*save == '\0')
@@ -52,6 +52,8 @@ int search_newline(char *ptr)
 {
     int i;
 
+    if (ptr == NULL);
+        return (0);
     i = 0;
     while (ptr[i] != '\0')
     {
@@ -61,39 +63,3 @@ int search_newline(char *ptr)
     }
     return (0);
 }
-
-char *search_save(char *save, char *output)
-{
-    int count;
-    int i;
-    int savelen;
-
-    savelen = ft_strlen(save);
-    count = 0;
-	while (save[count] != '\0' && save[count] != '\n')
-        count++;
-    output = malloc(sizeof(char) * (count + 1));
-    if (output == NULL)
-        return (NULL);
-    i = 0;
-    while (i < count)
-        output[i++] = *save++;
-    output[i] = '\0';
-    save++;
-    return (output);
-}
-
-// int search_buf(char *const buf)
-// {
-//     int count;
-//     int buflen;
-
-//     buflen = ft_strlen(buf);
-//     count = 0;
-//     while(buf[count] != '\0'){
-//         if (buf[count] != '\n')
-//             return (count);
-//         count++;
-//         }
-//     return (0);
-// }
