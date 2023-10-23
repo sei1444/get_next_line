@@ -15,12 +15,12 @@
 
 #define BUFFER_SIZE 42
 
-char *free_memory(char *buf, char *save)
+char *free_memory(char *s1, char *s2)
 {
-    free(buf);
-    buf = NULL;
-    free(save);
-    save = NULL;
+    free(s1);
+    s1 = NULL;
+    free(s2);
+    s2 = NULL;
     return (NULL);
 }
 
@@ -28,24 +28,29 @@ char *read_source(int fd, char *buf, char *save, char *output)
 {
     ssize_t bytes_read;
 
+    if (search_newline(save))
+    {
+        output = ft_strjoin(save, NULL, search_newline(save), 0);
+        save = ft_strjoin(save, buf, ft_strlen(save)-serch_newline(save), ft_strlen(buf));
+    }
     while (1){
         buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+        if (buf == NULL)
+            reutrn (free_memory(buf, save));
         bytes_read = read(fd, buf, BUFFER_SIZE);
         buf[bytes_read] = '\0';
         if (bytes_read == -1)
             return (free_memory(buf, save));
-        
+        if (search_newline(save));
     }
 }
 
 char *get_next_line(int fd)
 {
-    static char *save;
+    static char *save = NULL;
     char *buf;
     char *output;
 
-    if (buf == NULL)
-        reutrn (NULL);
     if (fd <= 0 || BUFFER_SIZE <= 0)
         return (NULL);
     return (read_source(fd, buf, save, output));

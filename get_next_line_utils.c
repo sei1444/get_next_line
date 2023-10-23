@@ -25,7 +25,7 @@ size_t ft_strlen(const char *s)
     return (i);
 }
 
-char	*ft_strjoin(char *save, char const *s2, int s2len)
+char	*ft_strjoin(char *save, char const *str, int savelen, int s2len)
 {
 	int		i;
 	int		j;
@@ -35,25 +35,34 @@ char	*ft_strjoin(char *save, char const *s2, int s2len)
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;
-	while (save != NULL && save[i] != '\0')
-	{
-		ptr[i] = save[i];
-		i++;
-	}
+	while (save != NULL && i < savelen)
+		ptr[i] = save++;
 	j = 0;
-	while (s2 != NULL && j < s2len)
-	{
-		ptr[i + j] = s2[j];
-		j++;
-	}
+	while (str != NULL && j < s2len)
+		ptr[i + j++] = str++;
 	ptr[i + j] = '\0';
-    free(save);
+    if (*save == '\0')
+        freememory(save, NULL);
+    if (*str == '\0')
+        freememory(str, NULL);
 	return (ptr);
 }
 
+int search_newline(char *ptr)
+{
+    int i;
 
+    i = 0;
+    while (ptr[i] != '\0')
+    {
+        if (ptr[i] == '\n')
+            return (i);
+        i++;
+    }
+    return (0);
+}
 
-int search_newline(char *save, char *output)
+char *search_save(char *save, char *output)
 {
     int count;
     int i;
@@ -63,8 +72,6 @@ int search_newline(char *save, char *output)
     count = 0;
 	while (save[count] != '\0' && save[count] != '\n')
         count++;
-    if (count == savelen)
-    	return (NULL);
     output = malloc(sizeof(char) * (count + 1));
     if (output == NULL)
         return (NULL);
