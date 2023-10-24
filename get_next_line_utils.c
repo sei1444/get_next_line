@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
+#include "get_next_line.h"
 
 size_t ft_strlen(const char *s)
 {
@@ -36,10 +35,10 @@ char	*ft_strjoin(char *save, char const *str, int savelen, int strlen)
 		return (NULL);
 	i = 0;
 	while (save != NULL && i < savelen)
-		ptr[i] = save++;
+		ptr[i] = *save++;
 	j = 0;
 	while (str != NULL && j < strlen)
-		ptr[i + j++] = str++;
+		ptr[i + j++] = *str++;
 	ptr[i + j] = '\0';
     if (*save == '\0')
         freememory(save, NULL);
@@ -52,7 +51,7 @@ int search_newline(char *ptr)
 {
     int i;
 
-    if (ptr == NULL);
+    if (ptr == NULL)
         return (0);
     i = 0;
     while (ptr[i] != '\0')
