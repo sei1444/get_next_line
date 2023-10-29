@@ -12,11 +12,13 @@
 
 #include "get_next_line.h"
 
-char *free_memory(char *save, char *buf)
+char *free_memory(char **save, char **buf)
 {
-    free(save);
-    save = NULL;
-    free(buf);
+    printf("free\n");
+    free(*save);
+    if (*save != NULL)
+        *save = NULL;
+    free(*buf);
     return (NULL);
 }
 
@@ -31,7 +33,8 @@ char *get_output(char **save)
         return (*save);
     output = malloc(sizeof(char) * (count + 1));
     if (output == NULL)
-        return (free_memory(*save, NULL));
+        return (free_memory(save, NULL));
+    printf("malloc\n");
     i = 0;
     while (i < count)
     {
@@ -50,14 +53,18 @@ char *read_source(int fd, char *buf, char *save)
     buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (buf == NULL)
         return (NULL);
+    printf("malloc\n");
     while (!search_newline(save))
     {
         bytes_read = read(fd, buf, BUFFER_SIZE);
-        buf[bytes_read] = '\0';
         if (bytes_read == -1)
-            return (free_memory(save, buf));
+            return (free_memory(&save, &buf));
         else if (bytes_read == 0)
+        {
+            free_memory(&save, &buf);
             return (save);
+        }
+        buf[bytes_read] = '\0';
         save = ft_strjoin(save, buf);
     }
     free(buf);
@@ -70,21 +77,30 @@ char *get_next_line(int fd)
     char *buf;
 
     buf = NULL;
+    // if (save ==  NULL)
+    // {
+    //     save = malloc(sizeof(char));
+    //     if (save == NULL)
+    //         return (NULL);
+    //     save[0] = '\0';
+    // }
     if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
     return (read_source(fd, buf, save));
 }
 
+#include <fcntl.h>
 
-// int main(void)
-// {
-//     char *ptr;
-//     ptr = get_next_line(0);
-//     while (ptr != NULL)
-//     {
-//         ptr = get_next_line(0);
-//         printf("%s\n", ptr);
-//         free(ptr);        
-//     }
-//     return (0);
-// }
+int main(void)
+{
+    int fd;
+    char *ptr;
+
+    for (size_t i = 0; i < 2; i++)
+    {
+    	fd = open("file/empty", O_RDWR);
+        ptr = get_next_line(fd);
+        ptr == NULL;
+    }
+    return (0);
+}

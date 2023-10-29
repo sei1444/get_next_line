@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 char *get_next_line(int fd);
-char *free_memory(char *save, char *buf);
+char *free_memory(char **save, char **buf);
 char *get_output(char **save);
 char *read_source(int fd, char *buf, char *save);
 size_t ft_strlen(const char *s);

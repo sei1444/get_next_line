@@ -46,7 +46,7 @@ char	*ft_strjoin(char *save, char *buf)
         j++;
     }
     ptr[i + j] = '\0';
-    free_memory(save, NULL);
+    free_memory(&save, NULL);
 	return (ptr);
 }
 
