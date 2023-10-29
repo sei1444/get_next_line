@@ -34,7 +34,7 @@ char	*ft_strjoin(char *save, char *buf)
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;
-	while (save[i] != '\0')
+	while (save != NULL && save[i] != '\0')
     {
 		ptr[i] = save[i];
         i++;

@@ -70,7 +70,21 @@ char *get_next_line(int fd)
     char *buf;
 
     buf = NULL;
-    if (fd <= 0 || BUFFER_SIZE <= 0)
+    if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
     return (read_source(fd, buf, save));
 }
+
+
+// int main(void)
+// {
+//     char *ptr;
+//     ptr = get_next_line(0);
+//     while (ptr != NULL)
+//     {
+//         ptr = get_next_line(0);
+//         printf("%s\n", ptr);
+//         free(ptr);        
+//     }
+//     return (0);
+// }
