@@ -12,53 +12,65 @@
 
 #include "get_next_line.h"
 
-char *free_memory(char *s1, char *s2)
+char *free_memory(char *save, char *buf)
 {
-    free(s1);
-    s1 = NULL;
-    free(s2);
-    s2 = NULL;
+    free(save);
+    save = NULL;
+    free(buf);
     return (NULL);
 }
 
-char *read_source(int fd, char *buf, char *save, char *output)
+char *get_output(char **save)
+{
+    int i;
+    int count;
+    char *output;
+
+    count = search_newline(*save);
+    if (count == 0)
+        return (*save);
+    output = malloc(sizeof(char) * (count + 1));
+    if (output == NULL)
+        return (free_memory(*save, NULL));
+    i = 0;
+    while (i < count)
+    {
+        output[i++] = **save;
+        (*save)++;
+    }
+    output[i] = '\0';
+    (*save)++;
+    return (output);
+}
+
+char *read_source(int fd, char *buf, char *save)
 {
     ssize_t bytes_read;
 
-    if (search_newline(save))
+    buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+    if (buf == NULL)
+        return (NULL);
+    while (!search_newline(save))
     {
-        output = ft_strjoin(save, NULL, search_newline(save), 0);
-        save = ft_strjoin(save, buf, ft_strlen(save) - search_newline(save), ft_strlen(buf));
-        return (output);
-    }
-    while (1){
-        buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-        if (buf == NULL)
-            return (free_memory(buf, save));
         bytes_read = read(fd, buf, BUFFER_SIZE);
         buf[bytes_read] = '\0';
         if (bytes_read == -1)
-            return (free_memory(buf, save));
-        if (search_newline(buf))
-        {
-            output = ft_strjoin(save, buf, ft_strlen(save), search_newline(buf));
-            return (output); 
-        }
-        else
-            save = ft_strjoin(save, buf, ft_strlen(save), ft_strlen(buf));
-            if (bytes_read == 0)
-                return (save);
+            return (free_memory(save, buf));
+        else if (bytes_read == 0)
+            return (save);
+        save = ft_strjoin(save, buf);
     }
-    return (NULL);
+    free(buf);
+    return (get_output(&save));
 }
 
 char *get_next_line(int fd)
 {
     static char *save = NULL;
     char *buf;
-    char *output;
 
+    buf = NULL;
     if (fd <= 0 || BUFFER_SIZE <= 0)
         return (NULL);
-    return (read_source(fd, buf, save, output));
+    return (read_source(fd, buf, save));
 }

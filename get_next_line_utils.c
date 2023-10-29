@@ -24,26 +24,29 @@ size_t ft_strlen(const char *s)
     return (i);
 }
 
-char	*ft_strjoin(char *save, char const *str, int savelen, int strlen)
+char	*ft_strjoin(char *save, char *buf)
 {
 	int		i;
 	int		j;
 	char	*ptr;
 
-	ptr = malloc(sizeof(char) * (savelen + strlen + 1));
+	ptr = malloc(sizeof(char) * (ft_strlen(save) + ft_strlen(buf) + 1));
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;
-	while (save != NULL && i < savelen)
-		ptr[i] = *save++;
-	j = 0;
-	while (str != NULL && j < strlen)
-		ptr[i + j++] = *str++;
-	ptr[i + j] = '\0';
-    if (*save == '\0')
-        freememory(save, NULL);
-    if (*str == '\0')
-        freememory(str, NULL);
+	while (save[i] != '\0')
+    {
+		ptr[i] = save[i];
+        i++;
+    }
+    j = 0;
+	while (buf[j] != '\0')
+	{
+    	ptr[i + j] = buf[j];
+        j++;
+    }
+    ptr[i + j] = '\0';
+    free_memory(save, NULL);
 	return (ptr);
 }
 
