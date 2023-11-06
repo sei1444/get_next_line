@@ -46,6 +46,7 @@ char	*ft_strjoin(char *save, char *buf)
         j++;
     }
     ptr[i + j] = '\0';
+    printf("p:%s", ptr);
     free_memory(&save, NULL);
 	return (ptr);
 }
@@ -56,10 +57,10 @@ int search_newline(char *ptr)
 
     if (ptr == NULL)
         return (0);
-    i = 0;
-    while (ptr[i] != '\0')
+    i = 1;
+    while (ptr[i - 1] != '\0')
     {
-        if (ptr[i] == '\n')
+        if (ptr[i - 1] == '\n')
             return (i);
         i++;
     }

@@ -14,11 +14,17 @@
 
 char *free_memory(char **save, char **buf)
 {
-    printf("free\n");
-    free(*save);
-    if (*save != NULL)
+    // printf("free\n");
+    if (save != NULL && *save != NULL)
+    {
+        free(*save);
         *save = NULL;
-    free(*buf);
+    }
+    if (buf != NULL && *buf != NULL)
+    {
+        free(*buf);
+        *buf = NULL;
+    }
     return (NULL);
 }
 
@@ -34,7 +40,7 @@ char *get_output(char **save)
     output = malloc(sizeof(char) * (count + 1));
     if (output == NULL)
         return (free_memory(save, NULL));
-    printf("malloc\n");
+    // printf("malloc\n");
     i = 0;
     while (i < count)
     {
@@ -52,8 +58,7 @@ char *read_source(int fd, char *buf, char *save)
 
     buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (buf == NULL)
-        return (NULL);
-    printf("malloc\n");
+        return (free_memory(&save, NULL));
     while (!search_newline(save))
     {
         bytes_read = read(fd, buf, BUFFER_SIZE);
@@ -61,11 +66,13 @@ char *read_source(int fd, char *buf, char *save)
             return (free_memory(&save, &buf));
         else if (bytes_read == 0)
         {
-            free_memory(&save, &buf);
-            return (save);
+            free_memory(NULL, &buf);
+            return (get_output(&save));
         }
         buf[bytes_read] = '\0';
         save = ft_strjoin(save, buf);
+        if (save == NULL)
+            return (free_memory(&save, &buf));
     }
     free(buf);
     return (get_output(&save));
@@ -77,30 +84,23 @@ char *get_next_line(int fd)
     char *buf;
 
     buf = NULL;
-    // if (save ==  NULL)
-    // {
-    //     save = malloc(sizeof(char));
-    //     if (save == NULL)
-    //         return (NULL);
-    //     save[0] = '\0';
-    // }
     if (fd < 0 || BUFFER_SIZE <= 0)
-        return (NULL);
+        return (free_memory(&save, NULL));
     return (read_source(fd, buf, save));
 }
 
-#include <fcntl.h>
+// #include <fcntl.h>
 
-int main(void)
-{
-    int fd;
-    char *ptr;
+// int main(void)
+// {
+//     int fd;
+//     char *ptr;
 
-    for (size_t i = 0; i < 2; i++)
-    {
-    	fd = open("file/empty", O_RDWR);
-        ptr = get_next_line(fd);
-        ptr == NULL;
-    }
-    return (0);
-}
+// 	fd = open("file/nl", O_RDWR);
+//     for (size_t i = 0; i < 2; i++)
+//     {
+//         ptr = get_next_line(fd);
+//         printf("s:%s", ptr);
+//     }
+//     return (0);
+// }
