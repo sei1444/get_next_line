@@ -18,12 +18,12 @@
 #include <stdlib.h>
 
 char *get_next_line(int fd);
-char *free_memory(char **save, char **buf);
 char *get_output(char *save);
 char *read_source(int fd, char *buf, char *save);
 size_t ft_strlen(const char *s);
+char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char *save, char *buf);
 int search_newline(char *ptr);
-char	*ft_strdup(char *save, int start);
+char	*ft_strdup(const char *s1);
 
 #endif
