@@ -28,27 +28,30 @@ char *free_memory(char **save, char **buf)
     return (NULL);
 }
 
-char *get_output(char **save)
+char *get_output(char *save)
 {
     int i;
     int count;
     char *output;
+    char *tmp;
 
-    count = search_newline(*save);
+    count = search_newline(save);
     if (count == 0)
-        return (*save);
+        return (save);
     output = malloc(sizeof(char) * (count + 1));
     if (output == NULL)
-        return (free_memory(save, NULL));
+        return (free_memory(&save, NULL));
     // printf("malloc\n");
     i = 0;
     while (i < count)
     {
-        output[i++] = **save;
-        (*save)++;
+        output[i] = (save)[i];
+        i++;
     }
     output[i] = '\0';
-    (*save)++;
+    tmp = ft_strdup(save, count);
+    free_memory(&save, NULL);
+    save = tmp;
     return (output);
 }
 
@@ -67,7 +70,7 @@ char *read_source(int fd, char *buf, char *save)
         else if (bytes_read == 0)
         {
             free_memory(NULL, &buf);
-            return (get_output(&save));
+            return (get_output(save));
         }
         buf[bytes_read] = '\0';
         save = ft_strjoin(save, buf);
@@ -75,7 +78,7 @@ char *read_source(int fd, char *buf, char *save)
             return (free_memory(&save, &buf));
     }
     free(buf);
-    return (get_output(&save));
+    return (get_output(save));
 }
 
 char *get_next_line(int fd)

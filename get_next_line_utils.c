@@ -46,7 +46,6 @@ char	*ft_strjoin(char *save, char *buf)
         j++;
     }
     ptr[i + j] = '\0';
-    printf("p:%s", ptr);
     free_memory(&save, NULL);
 	return (ptr);
 }
@@ -65,4 +64,22 @@ int search_newline(char *ptr)
         i++;
     }
     return (0);
+}
+
+char	*ft_strdup(char *save, int start)
+{
+	int		i;
+	char	*ptr;
+
+	ptr = malloc(sizeof(char) * (ft_strlen(save) - start + 1));
+	if (ptr == NULL)
+		return (NULL);
+	i = 0;
+	while (save[start + i] != '\0')
+	{
+		ptr[i] = save[start + i];
+		i++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
 }
