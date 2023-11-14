@@ -18,8 +18,8 @@
 #include <stdlib.h>
 
 char *get_next_line(int fd);
-char *get_output(char *save);
-char *read_source(int fd, char *buf, char *save);
+char *get_output(char **save);
+char *read_source(int fd, char *buf, char **save);
 size_t ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char *save, char *buf);

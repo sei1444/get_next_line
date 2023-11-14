@@ -27,7 +27,7 @@
 //     return (NULL);
 // }
 
-char *get_output(char *save)
+char *get_output(char **save)
 {
     int i;
     int count;
@@ -35,45 +35,46 @@ char *get_output(char *save)
     char *free_ptr;
     char *tmp;
 
-    count = search_newline(save);
+    count = search_newline(*save);
     if (count == 0)
-        return (save);
+        return (*save);
     output = malloc(sizeof(char) * (count + 1));
     if (output == NULL)
     {
-        free(save);
+        free(*save);
         return (NULL);
     }
     i = 0;
-    free_ptr = save;
+    free_ptr = *save;
     while (i < count)
     {
-        output[i] = *save;
-        save++;
+        output[i] = **save;
+        (*save)++;
         i++;
     }
     output[i] = '\0';
-    tmp = ft_strdup(save);
+    tmp = ft_strdup(*save);
     free(free_ptr);
+    *save = tmp;
     return (output);
 }
 
-char *read_source(int fd, char *buf, char *save)
+char *read_source(int fd, char *buf, char **save)
 {
     ssize_t bytes_read;
 
     buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (buf == NULL)
     {
-        free(save);
+        free(*save);
         return (NULL);
     }
-    while (!ft_strchr(save, '\n'))
+    while (!ft_strchr(*save, '\n'))
     {
         bytes_read = read(fd, buf, BUFFER_SIZE);
         if (bytes_read == -1)
         {
-            free(save);
+            free(*save);
             free(buf);
             return (NULL);
         }
@@ -83,7 +84,7 @@ char *read_source(int fd, char *buf, char *save)
             return (get_output(save));
         }
         buf[bytes_read] = '\0';
-        save = ft_strjoin(save, buf);
+        *save = ft_strjoin(*save, buf);
     }
     free(buf);
     return (get_output(save));
@@ -100,7 +101,7 @@ char *get_next_line(int fd)
         free(save);
         return (NULL);
     }
-    return (read_source(fd, buf, save));
+    return (read_source(fd, buf, &save));
 }
 
 // #include <fcntl.h>
@@ -110,17 +111,20 @@ char *get_next_line(int fd)
 //     int fd;
 //     char *ptr;
 
-// 	fd = open("file/nl", O_RDWR);
-//     for (size_t i = 0; i < 2; i++)
-//     {
-//         ptr = get_next_line(fd);
-//         printf("s:%s", ptr);
-//     }
+// 	fd = open("file/41_no_nl", O_RDWR);
+//     // for (size_t i = 0; i < 2; i++)
+//     // {
+//     //     ptr = get_next_line(fd);
+//     //     printf("s:%s", ptr);
+//     // }
+//     ptr = get_next_line(fd);
+//     printf("s:%s", ptr);
 //     return (0);
 // }
 
 int main(){
-    char *save = malloc(sizeof(char) * 15);
+    static char *save = NULL;
+    save = malloc(sizeof(char) * 15);
     save[0] = 'a';
     save[1] = 'a';
     save[2] = 'a';
@@ -138,8 +142,9 @@ int main(){
     save[14] = 'b';
     save[15] = '\0';
     char *ptr;
-    ptr = get_output(save);
+    ptr = get_output(&save);
     printf("ptr:%s\n", ptr);
     printf("save:%s\n", save);
+    free(save);
     return 0;
 }
