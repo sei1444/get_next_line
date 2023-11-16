@@ -29,6 +29,8 @@ char	*ft_strchr(const char *s, int c)
 	char	con;
 	char	*str;
 
+    if (s == NULL)
+        return (NULL);
 	con = (char)c;
 	str = (char *)s;
 	while (*str != '\0')
@@ -65,7 +67,7 @@ char	*ft_strjoin(char *save, char *buf)
         j++;
     }
     ptr[i + j] = '\0';
-    free(save);
+    // free(save);
 	return (ptr);
 }
 
@@ -90,6 +92,7 @@ char	*ft_strdup(const char *s1)
 	int		i;
 	char	*ptr;
 
+    
 	ptr = malloc(sizeof(char) * (ft_strlen(s1) + 1));
 	if (ptr == NULL)
 		return (NULL);

@@ -56,12 +56,19 @@ char *get_output(char **save)
     tmp = ft_strdup(*save);
     free(free_ptr);
     *save = tmp;
+    if (*output == '\0')
+    {
+        free(output);
+        return (NULL);
+    }
+    // printf("save%s", *save);
     return (output);
 }
 
 char *read_source(int fd, char *buf, char **save)
 {
     ssize_t bytes_read;
+    char *tmp;
 
     buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (buf == NULL)
@@ -69,7 +76,8 @@ char *read_source(int fd, char *buf, char **save)
         free(*save);
         return (NULL);
     }
-    while (!ft_strchr(*save, '\n'))
+    bytes_read = 1;
+    while (ft_strchr(*save, '\n') == NULL && bytes_read != 0)
     {
         bytes_read = read(fd, buf, BUFFER_SIZE);
         if (bytes_read == -1)
@@ -78,13 +86,10 @@ char *read_source(int fd, char *buf, char **save)
             free(buf);
             return (NULL);
         }
-        else if (bytes_read == 0)
-        {
-            free(buf);
-            return (get_output(save));
-        }
         buf[bytes_read] = '\0';
-        *save = ft_strjoin(*save, buf);
+        tmp = ft_strjoin(*save, buf);
+        free(*save);
+        *save = tmp;
     }
     free(buf);
     return (get_output(save));
@@ -95,6 +100,11 @@ char *get_next_line(int fd)
     static char *save = NULL;
     char *buf;
 
+    if (save != NULL && *save == '\0')
+    {
+        free(save);
+        save = NULL;
+    }
     buf = NULL;
     if (fd < 0 || BUFFER_SIZE <= 0)
     {
@@ -104,47 +114,46 @@ char *get_next_line(int fd)
     return (read_source(fd, buf, &save));
 }
 
-// #include <fcntl.h>
+#include <fcntl.h>
 
-// int main(void)
-// {
-//     int fd;
-//     char *ptr;
-
-// 	fd = open("file/41_no_nl", O_RDWR);
-//     // for (size_t i = 0; i < 2; i++)
-//     // {
-//     //     ptr = get_next_line(fd);
-//     //     printf("s:%s", ptr);
-//     // }
-//     ptr = get_next_line(fd);
-//     printf("s:%s", ptr);
-//     return (0);
-// }
-
-int main(){
-    static char *save = NULL;
-    save = malloc(sizeof(char) * 15);
-    save[0] = 'a';
-    save[1] = 'a';
-    save[2] = 'a';
-    save[3] = 'a';
-    save[4] = 'a';
-    save[5] = 'a';
-    save[6] = '\n';
-    save[7] = 'b';
-    save[8] = 'b';
-    save[9] = 'b';
-    save[10] = 'b';
-    save[11] = 'b';
-    save[12] = 'b';
-    save[13] = 'b';
-    save[14] = 'b';
-    save[15] = '\0';
+int main(void)
+{
+    int fd;
     char *ptr;
-    ptr = get_output(&save);
-    printf("ptr:%s\n", ptr);
-    printf("save:%s\n", save);
-    free(save);
-    return 0;
+
+	fd = open("file/alternate_line_nl_with_nl", O_RDWR);
+	// fd = open("file/a", O_RDWR);
+    for (size_t i = 0; i < 5; i++)
+    {
+        ptr = get_next_line(fd);
+        printf("s:%s", ptr);
+    }
+    return (0);
 }
+
+// int main(){
+//     static char *save = NULL;
+//     save = malloc(sizeof(char) * 15);
+//     save[0] = 'a';
+//     save[1] = 'a';
+//     save[2] = 'a';
+//     save[3] = 'a';
+//     save[4] = 'a';
+//     save[5] = 'a';
+//     save[6] = '\n';
+//     save[7] = 'b';
+//     save[8] = 'b';
+//     save[9] = 'b';
+//     save[10] = 'b';
+//     save[11] = 'b';
+//     save[12] = 'b';
+//     save[13] = 'b';
+//     save[14] = 'b';
+//     save[15] = '\0';
+//     char *ptr;
+//     ptr = get_output(&save);
+//     printf("ptr:%s\n", ptr);
+//     printf("save:%s\n", save);
+//     free(save);
+//     return 0;
+// }
