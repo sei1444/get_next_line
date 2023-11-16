@@ -12,20 +12,16 @@
 
 #include "get_next_line.h"
 
-// char *free_memory(char **save, char **buf)
-// {
-//     if (save != NULL && *save != NULL)
-//     {
-//         free(*save);
-//         *save = NULL;
-//     }
-//     if (buf != NULL && *buf != NULL)
-//     {
-//         free(*buf);
-//         *buf = NULL;
-//     }
-//     return (NULL);
+// __attribute__((destructor))
+// static void destructor() {
+//     system("leaks -q a.out");
 // }
+
+char *free_memory(char *ptr)
+{
+    free(ptr);
+    return (NULL);
+}
 
 char *get_output(char **save)
 {
@@ -36,32 +32,21 @@ char *get_output(char **save)
     char *tmp;
 
     count = search_newline(*save);
-    if (count == 0)
-        return (*save);
     output = malloc(sizeof(char) * (count + 1));
     if (output == NULL)
-    {
-        free(*save);
-        return (NULL);
-    }
+        return (free_memory(*save));
     i = 0;
     free_ptr = *save;
     while (i < count)
-    {
-        output[i] = **save;
-        (*save)++;
-        i++;
-    }
+        output[i++] = *(*save)++;
     output[i] = '\0';
-    tmp = ft_strdup(*save);
+    tmp = NULL;
+    if (**save != '\0')
+        tmp = ft_strdup(*save);
     free(free_ptr);
     *save = tmp;
     if (*output == '\0')
-    {
-        free(output);
-        return (NULL);
-    }
-    // printf("save%s", *save);
+        return (free_memory(output));
     return (output);
 }
 
@@ -72,10 +57,7 @@ char *read_source(int fd, char *buf, char **save)
 
     buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (buf == NULL)
-    {
-        free(*save);
-        return (NULL);
-    }
+        return (free_memory(*save));
     bytes_read = 1;
     while (ft_strchr(*save, '\n') == NULL && bytes_read != 0)
     {
@@ -100,11 +82,6 @@ char *get_next_line(int fd)
     static char *save = NULL;
     char *buf;
 
-    if (save != NULL && *save == '\0')
-    {
-        free(save);
-        save = NULL;
-    }
     buf = NULL;
     if (fd < 0 || BUFFER_SIZE <= 0)
     {
@@ -114,22 +91,23 @@ char *get_next_line(int fd)
     return (read_source(fd, buf, &save));
 }
 
-#include <fcntl.h>
+// #include <fcntl.h>
 
-int main(void)
-{
-    int fd;
-    char *ptr;
+// int main(void)
+// {
+//     int fd;
+//     char *ptr;
 
-	fd = open("file/alternate_line_nl_with_nl", O_RDWR);
-	// fd = open("file/a", O_RDWR);
-    for (size_t i = 0; i < 5; i++)
-    {
-        ptr = get_next_line(fd);
-        printf("s:%s", ptr);
-    }
-    return (0);
-}
+// 	fd = open("file/alternate_line_nl_with_nl", O_RDWR);
+// 	// fd = open("file/a", O_RDWR);
+//     for (size_t i = 0; i < 5; i++)
+//     {
+//         ptr = get_next_line(fd);
+//         printf("s:%s", ptr);
+//         free(ptr);
+//     }
+//     return (0);
+// }
 
 // int main(){
 //     static char *save = NULL;
