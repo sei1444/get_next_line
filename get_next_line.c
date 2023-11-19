@@ -6,7 +6,7 @@
 /*   By: seono <seono@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 22:05:55 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/19 15:59:51 by seono            ###   ########.fr       */
+/*   Updated: 2023/11/19 16:28:34 by seono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,9 @@ char	*read_source(int fd, char *buf, char **save)
 
 char	*get_next_line(int fd)
 {
-	static char	*save;
+	static char	*save = NULL;
 	char		*buf;
 
-	save = NULL;
 	buf = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 	{
