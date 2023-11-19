@@ -6,12 +6,16 @@
 /*   By: seono <seono@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 22:05:52 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/19 15:59:38 by seono            ###   ########.fr       */
+/*   Updated: 2023/11/19 16:50:08 by seono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
+# ifndef BUFFER_SIZE
+# define BUFFER_SIZE 42
+# endif
 
 # include <stdio.h>
 # include <stdlib.h>
