@@ -6,7 +6,7 @@
 /*   By: seono <seono@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 22:05:57 by marvin            #+#    #+#             */
-/*   Updated: 2023/11/19 15:59:11 by seono            ###   ########.fr       */
+/*   Updated: 2023/11/21 18:11:48 by seono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*ft_strjoin(char *save, char *buf)
 	return (ptr);
 }
 
-int	search_newline(char *ptr)
+int	count_until_newline(char *ptr)
 {
 	int	i;
 
